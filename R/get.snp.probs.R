@@ -8,10 +8,10 @@
 #'            Samples in rows, 8 founders in columns, markers in slices.
 #' map: list containing numeric vectors of marker positions in Mb.
 #' query_fxn: function for querying the CC_SNP data base. Obtain this
-#            by calling qtl2db:::create_variant_query_func().
+#            by calling qtl2:::create_variant_query_func().
 #' @return an n x 1 numeric matrix.
 #' @examples
-#' query_fxn = qtl2db::create_variant_query_func(cc_dbfile, filter = "type=='snp'")
+#' query_fxn = qtl2::create_variant_query_func(cc_dbfile, filter = "type=='snp'")
 #' get_snp_probs = function(chr = "1", pos = 5.0, genoprobs = genoprobs, map = map, query_fxn = query_fxn)
 #' @export
 get.snp.probs = function(chr, pos, genoprobs, map, query_fxn) {

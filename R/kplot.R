@@ -31,6 +31,8 @@
 #'                         selfcontained=TRUE)
 #'                         
 #' @export
+#' @importFrom dplyr group_by summarize
+#' @importFrom ggplot2 aes element_blank geom_point ggplot scale_x_continuous theme theme_bw xlab
 
 kplot <- function(med, symbol.col="symbol", chrlen=mouse.chrlen, ...){
   
@@ -57,7 +59,9 @@ kplot <- function(med, symbol.col="symbol", chrlen=mouse.chrlen, ...){
   # calculates breakpoints between chromosomes
   get_chr_breaks <- function(chr, gmb) {
     tmp <- data.frame(chr, gmb)
-    tmp2 <- tmp %>% group_by(chr) %>% summarize(maxgmb = max(gmb))
+    tmp2 <- dplyr::summarize(
+      dplyr::group_by(tmp, chr),
+      maxgmb = max(gmb)) 
     gmb.breakpoints <- c(0, sort(tmp2$maxgmb))
     return(sort(gmb.breakpoints))
   }
@@ -65,7 +69,9 @@ kplot <- function(med, symbol.col="symbol", chrlen=mouse.chrlen, ...){
   # calculates where to plot chromosome name
   get_chr_middle_points <- function(chr, gmb) {
     tmp <- data.frame(chr, gmb)
-    tmp2 <- tmp %>% group_by(chr) %>% summarize(maxgmb = min(gmb)/2 + max(gmb)/2)
+    tmp2 <- dplyr::summarize(
+      dplyr::group_by(tmp, chr),
+      maxgmb = min(gmb)/2 + max(gmb)/2) 
     gmb.breakpoints <- sort(tmp2$maxgmb)
     return(sort(gmb.breakpoints))
   }
@@ -76,14 +82,17 @@ kplot <- function(med, symbol.col="symbol", chrlen=mouse.chrlen, ...){
   gene.mid <- get_chr_middle_points(med$CHR, med$GMB)
   
   # to be corrected !!!
-  line.style <- theme_bw()$panel.grid.major
+  line.style <- ggplot2::theme_bw()$panel.grid.major
   
-  ggplot(med, aes(x=GMB, y=LOD, color=color, text=SYMBOL)) +
-    geom_point() +
-    scale_x_continuous(breaks=gene.mid, labels = chrs, minor_breaks=gene.breaks, expand=c(0,0)) +
-    theme(legend.position="none") +
-    theme(panel.grid.major.x = element_blank()) + 
-    theme(panel.grid.minor.x = line.style) +
-    xlab('Position')
-  
+  ggplot2::ggplot(med) +
+    ggplot2::aes(x=GMB, y=LOD, color=color, text=SYMBOL) +
+    ggplot2::geom_point() +
+    ggplot2::scale_x_continuous(breaks=gene.mid, 
+                                labels = chrs, 
+                                minor_breaks=gene.breaks, 
+                                expand=c(0,0)) +
+    ggplot2::theme(legend.position="none") +
+    ggplot2::theme(panel.grid.major.x = ggplot2::element_blank()) + 
+    ggplot2::theme(panel.grid.minor.x = line.style) +
+    ggplot2::xlab('Position')
 }

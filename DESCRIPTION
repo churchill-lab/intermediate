@@ -1,18 +1,23 @@
 Package: intermediate
 Type: Package
 Title: eQTl/pQTL Mediation analysis
-Version: 0.2-5
-Date: 2018-04-03
-Author: Petr Simecek, Steven Munger, Gary Churchill, Daniel Gatti
+Version: 0.3-6
+Date: 2018-04-09
+Author: Petr Simecek, Steven Munger, Gary Churchill, Daniel Gatti, Brian Yandell
 Maintainer: Daniel Gatti <dan.gatti@jax.org>
-Description: It searches for a mediator M that would explain Q->T relationship
-Depends: magrittr
+Description: Search for a mediator M that would explain D->T relationship.
 Imports: ggplot2,
          dplyr,
          plotly,
          htmlwidgets,
          testthat,
-         qtl2db,
+         stringr,
+         tidyr,
+         assertthat,
+         RColorBrewer,
+         grid,
+         stats,
+         purrr,
          AnnotationHub
 License: GPL-3
 LazyData: TRUE
